@@ -1,0 +1,23 @@
+#!/bin/sh
+
+(cat <<EOD; sleep 1) | ssh_cli
+conf set /bt/oie/enabled 0
+conf set /bt/saaf/enabled 0
+conf set /cwmp/enabled 0
+conf set /dev/atm0/enabled 0
+conf set /dev/br0/dhcps/enabled 0
+conf set /dev/dsl0/enabled 0
+conf set /dev/ppp0/enabled 0
+conf set /dev/ppp1/enabled 0
+conf set /dev/ppp3/enabled 0
+conf set /dev/ptm0/enabled 0
+conf set /disk/enabled 0
+conf set /dns/enabled 0
+conf set /fs/enabled 0
+conf set /fw/enabled 0
+conf set /mcast/enabled 0
+conf set /proxy/1/enabled 0
+conf set /upnp/igd/enabled 0
+conf set /wps/enabled 0
+conf reconf 1
+EOD

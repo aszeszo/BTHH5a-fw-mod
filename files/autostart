@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# wait for OpenRG services to start
+#sleep 10
+
+# Set main LED to green
+(echo "leds set 0 0x00ff00 0 1 0 0 -1"; sleep 1) | ssh_cli
+
+#/mnt/cramfs/netcat-shell

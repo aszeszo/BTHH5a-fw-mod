@@ -1,0 +1,137 @@
+BT Home Hub 5 Type A firmware modification scripts
+--------------------------------------------------
+
+Included scripts can be used to download and modify stock BT Home Hub 5 Type A
+firmware.
+
+BT Home Hub 5 Type A routers are generally well supported by OpenWrt.
+Unfortunately there is no hardware offload support in OpenWrt and throughput is
+a bit limited.
+
+Stock firmware has great Wi-Fi <-> LAN throughput (~450Mbps) but its admin ui
+is restricted.
+
+Included scripts can be used to prepare firmware images that have SSH enabled.
+SSH access makes it possible to use OpenRG CLI (ssh_cli) and access all hidden
+configuration options:
+
+BT Home Hub 5A> help
+Error: help should be called with at least 1 argument
+help   Show help for commands within this menu
+
+Usage:
+    help all - show all available commands in the current level
+    help [category]... <category> - show commands in a certain category
+    help [category]... <command> - show detailed help for a specific command
+    help -s <string> - search for categories/commands containing the string
+
+Availble help Categories
+help pvc - show help about PVC scan related commands
+help libnl - show help about Libnl Commands
+help ssh - show help about SSH commands
+help service - show help about Service commands
+help crash - show help about creates and watch crashes
+help atm_oam - show help about ATM OAM Commands, used for IPC from the Daemon
+help conf - show help about Read and write BT Home Hub 5.0A configuration data
+help ffs - show help about Flash file system
+help lan_host - show help about LAN hosts related information
+help kaccess - show help about Kernel address space access
+help hostapd - show help about Control and display hostapd data
+help bt - show help about BT's vendor specific commands
+help leds - show help about LED commands
+help upnp - show help about UPnP commands
+help qos - show help about Control and display QoS data
+help cwmp - show help about CWMP related commands
+help bridge - show help about API for managing ethernet bridge
+help ipv6 - show help about IPv6 related information
+help firewall - show help about Control and display Firewall and NAT data
+help connection - show help about API for managing connections
+help inet_connection - show help about API for managing internet connections
+help listener - show help about Listener related commands
+help traffic_counter - show help about Managing traffic counters
+help bootldr - show help about Bootloader commands
+help wireless - show help about Wireless commands
+help 802.1x - show help about 802.1x Port based authentication commands
+help misc - show help about API for BT Home Hub 5.0A miscellaneous tasks
+help firmware_update - show help about Firmware update commands
+help log - show help about Controls BT Home Hub 5.0A logging behavior
+help dev - show help about Device related commands
+help kernel - show help about Kernel related commands
+help system - show help about Commands to control BT Home Hub 5.0A execution
+help flash - show help about Flash and loader related commands
+help net - show help about Network related commands
+help cmd - show help about Commands related to the Command module
+
+Returned -1
+BT Home Hub 5A> 
+
+
+Flashing the firmware
+---------------------
+
+Generated firmware images are not signed or encrypted. UART access and tftp
+server are required for flashing.
+
+I did the following to flash my router:
+
+- restore stock BT firmware using 'restore' script from mkresin's
+  BTHH5a-installimage, keep bootloader unlocked (router was previously running
+  OpenWrt)
+
+- boot modified OpenRG firmware over tftp
+
+  tftpboot 0x81000000 OpenRG-modified.bin.lzma; bootm 0x81000000
+
+- Reset firmware config - this will enable SSH service. Router will reboot.
+  Interrupt boot process and boot the same image over tftp again.
+
+- SSH in as admin and run the following commands to write firmware image to
+  UbiFS 'OpenRG' volume. The volume normally contains two encrypted firmware
+  images. We are writing single unencrypted image to it.
+
+  cd /tmp && /mnt/cramfs/bin/wget http://x.x.x.x:8000/OpenRG-modified.bin.lzma && \
+    ubiupdatevol /dev/ubi0_1 -t && \
+    ubiupdatevol /dev/ubi0_1 OpenRG-modified.bin.lzma && \
+    echo system reboot | ssh_cli
+    
+  Equivalent commands can be used to flash the image when running
+  BTHH5a-installimage
+
+- Interrupt boot process. Update bootcmd variable.
+
+  printenv bootcmd
+
+  setenv bootcmd 'ubi part UBI; ubi read $(loadaddr) OpenRG; bootm $(loadaddr)'
+  saveenv
+
+  # to restore default bootcmd in the future:
+  # setenv bootcmd 'ubi part UBI; dualimage; bootm $(openrg_start)'
+  # saveenv
+
+- Power-cycle the device to boot modified firmware from flash
+
+
+Build dependencies
+------------------
+
+Ubuntu 16.04 packages:
+
+sudo apt-get install -y \
+  build-essential git u-boot-tools zlib1g-dev rsync curl squashfs-tools \
+  lzma-alone vim fakeroot
+
+Building the image
+------------------
+
+Run ./N-xxxxxxxxxxx.sh scripts in order.
+
+./1-build-tools.sh
+./2-download-openwrt.sh
+./3-extract-openwrt.sh
+./4-download-fw.sh
+./5-extract-fw.sh
+./6-modify-fw.sh
+./7-assemble-fw.sh
+
+Built image will be available in image/OpenRG-modified.bin.lzma
+

