@@ -45,3 +45,15 @@ entry_point=0x80479000
 #pos2=4845568
 #pos3=14807040
 #entry_point=0x80475000
+
+# Plusnet Hub One
+
+#key=86fd5557bab554172a97eaec65680745d4ec2efe723decb956a50bd9bc13e1a8
+
+#fw_version=4.7.5.1.83.8.237.2.2
+#fw_url=http://cdn.hs.motive.com/pbt/firmware/Plusnet/4.7.5.1.83.237.2.2/bt_prod_secured.rms
+#fw_sum=9c7f88901da5ac9cdfbadca9e4212ac31547ea7761eeac08f47aba8e68ecf5d0
+#pos1=4845568
+#pos2=4861952
+#pos3=14561280
+#entry_point=0x80479000
