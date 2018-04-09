@@ -5,11 +5,11 @@
 # remove OpenRG header (640 bytes), decrypt the file, remove uImage header (64 bytes)
 
 #dd if=dl/bt_prod_sec.enc.rms-${fw_version} bs=640 skip=1 | \
-#  openssl enc -d -aes-256-cbc -K 3E4CA8114D15BFC653B2BF9519EF2B94200E30345503B125C1D0BE776698B950 -iv 00000000000000000000000000000000 -nopad | \
+#  openssl enc -d -aes-256-cbc -K ${key} -iv 00000000000000000000000000000000 -nopad | \
 #  cat > build/openrg-kernel+initramfs+mainfs+modfs.orig.lzma.u-boot
 
 dd if=dl/bt_prod_sec.enc.rms-${fw_version} bs=640 skip=1 | \
-  openssl enc -d -aes-256-cbc -K 3E4CA8114D15BFC653B2BF9519EF2B94200E30345503B125C1D0BE776698B950 -iv 00000000000000000000000000000000 -nopad | \
+  openssl enc -d -aes-256-cbc -K ${key} -iv 00000000000000000000000000000000 -nopad | \
   dd bs=64 skip=1 \
   > build/openrg-kernel+initramfs+mainfs+modfs.orig.lzma.tmp
 

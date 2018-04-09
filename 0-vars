@@ -1,3 +1,7 @@
+# BT Home Hub 5 Type A
+
+key=3E4CA8114D15BFC653B2BF9519EF2B94200E30345503B125C1D0BE776698B950
+
 #fw_version=4.7.5.1.83.8.204
 #fw_url=http://cdn.hs.motive.com/pbt/firmware/hh5a/4.7.5.1.83.8.204/bt_prod_sec.enc.rms
 #fw_sum=734c56844da1d6356656793806d9d8004d72a101babb5e689a1f771be637c463
@@ -29,3 +33,15 @@ pos1=4845568
 pos2=4861952
 pos3=14430208
 entry_point=0x80479000
+
+# BT Business Hub 5 Type A
+
+#key=B1D3B4BD0970FCA9261E23C2170DB8E52407C71DAC06098678C0885BC7E68CCD
+
+#fw_version=4.7.5.1.83.8.230
+#fw_url=http://cdn.hs.motive.com/pbt/firmware/symlink/bh5a/mr1/bt_prod_sec.enc.rms
+#fw_sum=f9574e0902d31c93e6a2802b934eb64041b33a9012f01c6a31917267847586b8
+#pos1=4829184
+#pos2=4845568
+#pos3=14807040
+#entry_point=0x80475000
